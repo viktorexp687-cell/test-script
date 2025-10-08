@@ -1,3 +1,4 @@
+<script>
 (function () {
   if (window.__center_chat_loaded) return;
   window.__center_chat_loaded = true;
@@ -11,12 +12,14 @@
     --cc-text: #0f1724;
     --cc-muted: #6b7280;
     --cc-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    --cc-radius: 16px;
+    --cc-radius: 18px;
     --z-chat: 999999;
   }
 
   .cc-wrapper {
-    position: fixed; right: 24px; bottom: 24px;
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
     z-index: var(--z-chat);
     font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   }
@@ -34,50 +37,81 @@
   .cc-fab:hover { transform: scale(1.05); }
 
   .cc-panel {
-    width: 380px; max-width: calc(100vw - 40px);
-    height: 560px; max-height: calc(100vh - 120px);
+    width: 380px;
+    max-width: calc(100vw - 40px);
+    height: 560px;
+    max-height: calc(100vh - 120px);
     background: var(--cc-bg);
     color: var(--cc-text);
     border-radius: var(--cc-radius);
     box-shadow: var(--cc-shadow);
-    display: none; flex-direction: column; overflow: hidden;
-    animation: fadeIn .2s ease;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    animation: fadeIn .25s ease;
   }
 
-  @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
 
   .cc-header {
     background: var(--cc-blue);
     color: white;
-    padding: 18px 20px;
+    padding: 22px 20px;
+    text-align: left;
   }
-  .cc-header-title { font-weight: 700; font-size: 17px; }
-  .cc-header-sub { font-size: 13px; opacity: .9; margin-top: 4px; }
+  .cc-header-title {
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .cc-header-sub {
+    font-size: 13px;
+    opacity: .9;
+    margin-top: 6px;
+    line-height: 1.4;
+  }
 
   .cc-body {
     flex: 1;
     background: #fff;
-    padding: 14px;
-    display: flex; flex-direction: column; gap: 10px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     overflow-y: auto;
   }
 
-  .cc-msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.4; position: relative; }
-  .cc-msg.bot { background: var(--cc-gray); color: var(--cc-text); border-bottom-left-radius: 6px; display: flex; align-items: flex-start; gap: 8px; }
-  .cc-msg.bot::before {
-    content: ''; width: 20px; height: 20px; flex-shrink: 0;
-    background: url('https://cdn-icons-png.flaticon.com/512/869/869869.png') center/contain no-repeat;
-    opacity: 0.6;
+  .cc-msg {
+    max-width: 85%;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.45;
+    position: relative;
   }
-  .cc-msg.user { background: var(--cc-blue); color: white; margin-left: auto; border-bottom-right-radius: 6px; }
 
-  .cc-meta { font-size: 11px; color: var(--cc-muted); margin-top: 3px; }
+  .cc-msg.bot {
+    background: var(--cc-gray);
+    color: var(--cc-text);
+    border-bottom-left-radius: 6px;
+  }
+
+  .cc-msg.user {
+    background: var(--cc-blue);
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 6px;
+  }
 
   .cc-input-area {
     border-top: 1px solid #e3ebf9;
     background: #f9fafc;
-    padding: 10px 14px;
-    display: flex; align-items: center; gap: 8px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .cc-input {
@@ -98,7 +132,11 @@
     opacity: 0.6;
     transition: opacity .2s ease;
   }
-  .cc-send svg { width: 22px; height: 22px; fill: var(--cc-blue); }
+  .cc-send svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--cc-blue);
+  }
   .cc-send:hover { opacity: 1; }
 
   @media(max-width:420px){
@@ -148,17 +186,15 @@
   let greeted = false;
 
   function appendMessage(text, who = 'bot') {
-    const wrap = document.createElement('div');
     const msg = document.createElement('div');
     msg.className = 'cc-msg ' + who;
     msg.innerHTML = text;
-    wrap.append(msg);
-    body.append(wrap);
+    body.append(msg);
     body.scrollTop = body.scrollHeight;
   }
 
   function askEmail() {
-    appendMessage('Добро пожаловать в наш чатбот !<br><br>Перед началом чата укажите пожалуйста имейл, это поможет улучшить нашу работу', 'bot');
+    appendMessage('<b>Добро пожаловать в наш чатбот!</b><br><br>Перед началом чата укажите, пожалуйста, e-mail. Это поможет улучшить нашу работу 💬', 'bot');
     const box = document.createElement('div');
     box.innerHTML = `
       <input type="email" placeholder="eg.john@gmail.com" id="cc-email-input"
@@ -179,20 +215,20 @@
       }
       userEmail = val;
       box.remove();
-      appendMessage('<span style="color:#6b7280;font-weight:600;">Center Cruises</span><br>Задайте свой вопрос', 'bot');
+      appendMessage('<b>Center Cruises</b><br>Задайте свой вопрос 👇', 'bot');
     });
   }
 
   function botReply(txt) {
     if (!userEmail) {
-      appendMessage('Пожалуйста, укажите e-mail перед началом чата', 'bot');
+      appendMessage('Пожалуйста, укажите e-mail перед началом чата 📨', 'bot');
       return;
     }
     const lower = txt.toLowerCase();
     setTimeout(() => {
       if (lower.includes('привет')) appendMessage('Здравствуйте! Чем могу помочь?', 'bot');
       else if (lower.includes('круиз')) appendMessage('Мы подберем для вас идеальный круиз 🌊', 'bot');
-      else appendMessage('Спасибо! Наш менеджер скоро ответит.', 'bot');
+      else appendMessage('Спасибо! Наш менеджер скоро ответит 🙌', 'bot');
     }, 400);
   }
 
@@ -217,5 +253,5 @@
   input.addEventListener('keydown', e => {
     if (e.key === 'Enter') { e.preventDefault(); sendMessage(); }
   });
-
 })();
+</script>
